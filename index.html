@@ -2883,8 +2883,10 @@ function baixarCSVRelatorios(dados) {
     csv += linha + "\n";
   });
 
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
+const csvComBOM = "\uFEFF" + csv;
+const blob = new Blob([csvComBOM], { type: "text/csv;charset=utf-8;" });
+const url = URL.createObjectURL(blob);
+
 
   const link = document.createElement("a");
   link.href = url;
