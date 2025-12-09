@@ -2827,5 +2827,113 @@
     }
   });
 </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ab51b748655c6c1',t:'MTc2NTI4OTY0OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+
+<script>
+// =======================
+// COLETA OS DADOS DA TABELA
+// =======================
+function coletarDadosTabelaRelatorios() {
+  const linhas = document.querySelectorAll("#relatorios-table-body tr");
+  const dados = [];
+
+  linhas.forEach(tr => {
+    const colunas = tr.querySelectorAll("td");
+    if (colunas.length < 17) return;
+
+    dados.push({
+      unidade: colunas[0].innerText.trim(),
+      ridNumero: colunas[1].innerText.trim(),
+      dataEmissao: colunas[2].innerText.trim(),
+      emitente: colunas[3].innerText.trim(),
+      pessoaEnvolvida: colunas[4].innerText.trim(),
+      setor: colunas[5].innerText.trim(),
+      local: colunas[6].innerText.trim(),
+      genese: colunas[7].innerText.trim(),
+      origem: colunas[8].innerText.trim(),
+      descricao: colunas[9].innerText.trim(),
+      risco: colunas[10].innerText.trim(),
+      acaoImediata: colunas[11].innerText.trim(),
+      acoesCorretivas: colunas[12].innerText.trim(),
+      responsavel: colunas[13].innerText.trim(),
+      prazo: colunas[14].innerText.trim(),
+      dataConclusao: colunas[15].innerText.trim(),
+      status: colunas[16].innerText.trim()
+    });
+  });
+
+  return dados;
+}
+
+// =======================
+// GERAR E BAIXAR O CSV
+// =======================
+function baixarCSVRelatorios(dados) {
+  if (!dados || dados.length === 0) {
+    alert("Nenhum dado disponível para exportar.");
+    return;
+  }
+
+  const headers = Object.keys(dados[0]);
+  let csv = headers.join(";") + "\n";
+
+  dados.forEach(item => {
+    const linha = headers
+      .map(h => `"${String(item[h]).replace(/"/g, '""')}"`)
+      .join(";");
+    csv += linha + "\n";
+  });
+
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `relatorio_rids_${Date.now()}.csv`;
+  document.body.appendChild(link);
+  link.click();
+
+  link.remove();
+  URL.revokeObjectURL(url);
+}
+
+// =======================
+// BOTÃO EXPORTAR CSV
+// =======================
+document.getElementById("btn-exportar-relatorio").addEventListener("click", () => {
+  const dados = coletarDadosTabelaRelatorios();
+  baixarCSVRelatorios(dados);
+});
+</script>
+
+<script>
+(function(){
+  function c(){
+    var b=a.contentDocument||a.contentWindow.document;
+    if(b){
+      var d=b.createElement('script');
+      d.innerHTML="window.__CF$cv$params={r:'9ab51b748655c6c1',t:'MTc2NTI4OTY0OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";
+      b.getElementsByTagName('head')[0].appendChild(d)
+    }
+  }
+  if(document.body){
+    var a=document.createElement('iframe');
+    a.height=1;a.width=1;a.style.position='absolute';
+    a.style.top=0;a.style.left=0;a.style.border='none';
+    a.style.visibility='hidden';
+    document.body.appendChild(a);
+    if('loading'!==document.readyState) c();
+    else if(window.addEventListener) document.addEventListener('DOMContentLoaded',c);
+    else{
+      var e=document.onreadystatechange||function(){};
+      document.onreadystatechange=function(b){
+        e(b);
+        'loading'!==document.readyState&&(document.onreadystatechange=e,c())
+      }
+    }
+  }
+})();
+</script>
+
+</body>
 </html>
+
