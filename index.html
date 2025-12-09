@@ -2842,22 +2842,21 @@ function coletarDadosTabelaRelatorios() {
 
     dados.push({
       unidade: colunas[0].innerText.trim(),
-      ridNumero: colunas[1].innerText.trim(),
-      dataEmissao: colunas[2].innerText.trim(),
-      emitente: colunas[3].innerText.trim(),
-      pessoaEnvolvida: colunas[4].innerText.trim(),
-      setor: colunas[5].innerText.trim(),
+      Numero: colunas[1].innerText.trim(),
+      Data_de_Emissao: colunas[2].innerText.trim(),
+      Emitente: colunas[3].innerText.trim(),
+      Funcionario visitante ou terceiro: colunas[4].innerText.trim(),
+      Setor: colunas[5].innerText.trim(),
       local: colunas[6].innerText.trim(),
-      genese: colunas[7].innerText.trim(),
-      origem: colunas[8].innerText.trim(),
-      descricao: colunas[9].innerText.trim(),
-      risco: colunas[10].innerText.trim(),
-      acaoImediata: colunas[11].innerText.trim(),
-      acoesCorretivas: colunas[12].innerText.trim(),
-      responsavel: colunas[13].innerText.trim(),
-      prazo: colunas[14].innerText.trim(),
-      dataConclusao: colunas[15].innerText.trim(),
-      status: colunas[16].innerText.trim()
+      Genese_do_incidente: colunas[8].innerText.trim(),
+      Descricao: colunas[9].innerText.trim(),
+      Risco: colunas[10].innerText.trim(),
+      Ação_Imediata: colunas[11].innerText.trim(),
+      Ações_Corretivas: colunas[12].innerText.trim(),
+      Responsavel_pelas_ações: colunas[13].innerText.trim(),
+      Prazo_para_comclusão: colunas[14].innerText.trim(),
+      Data_de_Conclusao: colunas[15].innerText.trim(),
+      Status: colunas[16].innerText.trim()
     });
   });
 
@@ -2883,7 +2882,10 @@ function baixarCSVRelatorios(dados) {
     csv += linha + "\n";
   });
 
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  // BOM para Excel ler acentos corretamente
+  const BOM = "\uFEFF";
+  const blob = new Blob([BOM + csv], { type: "text/csv;charset=utf-8;" });
+
   const url = URL.createObjectURL(blob);
 
   const link = document.createElement("a");
@@ -2895,6 +2897,7 @@ function baixarCSVRelatorios(dados) {
   link.remove();
   URL.revokeObjectURL(url);
 }
+
 
 
 // =======================
